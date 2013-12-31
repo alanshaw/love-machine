@@ -36,7 +36,7 @@ h1 {
   opacity: 0;
 }
 #heart span:nth-child(even) {
-  color: #cb1e61;
+  color: #e73d7f;
 }
 #content {
   hyphens: auto;
