@@ -1,5 +1,9 @@
 !function () {
+  var hoodie  = new Hoodie()
+    , store = hoodie.open("hoodie-plugin-wedding-tweets")
+
   var heart = document.getElementById("heart")
+
   heart.style.height = (window.innerHeight - 20) + "px"
 
   var fontSize = parseFloat(getComputedStyle(heart, null).getPropertyValue("font-size"))
@@ -19,24 +23,8 @@
     heart.className = heart.className ? "" : "spin"
   }
 
-  var tweets = [
-    "@dave: Northern Ontario man kills 60-pound lynx with bare hands to save his dogs: http://bit.ly/1hQ7XzO  pic.twitter.com/myRP8pC8Ef",
-    "@bob_qillin: Grab a bargain! Get the HTC One & save £170. Now £49.99 upfront at £27 p/m. Ends 8th Jan. #lizzyalanwedding",
-    "@jeff_po: @jacobian so, the solution is to not promote the concept and equality will be naturally emergent? (Seriously asking)"
-  ]
-  var tIndex = 0
-
-  var addTweet = document.getElementById("tweet")
-
-  addTweet.addEventListener("click", function () {
-    var tweet = tweets[tIndex]
-
-    if (!tweet) {
-      tIndex = 0
-      tweet = tweets[0]
-    } else {
-      tIndex++
-    }
+  function addTweet (tweet) {
+    var tweetHtml = " <span class=\"new\">" + tweet.text + "</span>"
 
     spin()
 
@@ -44,20 +32,38 @@
     setTimeout(function () {
 
       // Buggy shape-inside implementation doesn't work if we append a node (2013-12-31)
-      heart.innerHTML = heart.innerHTML + " <span class=\"new\">" + tweet + "</span>"
+      heart.innerHTML = heart.innerHTML + tweetHtml
 
       reflow()
 
       // Allow CSS to transition the tweet in the next tick
       setTimeout(function () {
-        var tweets = document.getElementsByClassName("new")
+        var tweets = document.querySelectorAll(".new")
         for (var i = 0; i < tweets.length; ++i) {
           tweets[i].className = ""
         }
       }, 0)
 
     }, 400)
+  }
 
+  store.findAll("tweet").done(function (tweets) {
+    console.log("Found", tweets.length, "tweets")
+
+    heart.innerHTML = tweets.map(function (t) {
+      return " <span>" + t.text + "</span>"
+    }).join(" ")
+
+    reflow()
+
+    // Miss the initial "add" events which seem to be fired and received in this same tick!
+    setTimeout(function () {
+      store.on("add:tweet", function (tweet) {
+        console.log("Adding tweet", tweet)
+        addTweet(tweet)
+      })
+    }, 0)
   })
 
+  store.connect()
 }()
