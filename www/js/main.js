@@ -1,6 +1,6 @@
 !function () {
   var hoodie  = new Hoodie()
-    , store = hoodie.open("hoodie-plugin-wedding-tweets")
+    , store = hoodie.open("hoodie-plugin-tweets")
 
   var heart = document.getElementById("heart")
 
