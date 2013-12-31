@@ -24,7 +24,7 @@
   }
 
   function addTweet (tweet) {
-    var tweetHtml = " <span class=\"new\">" + tweet.text + "</span>"
+    var tweetHtml = " <span class=\"new\">" + tweet.user.name + ": " + tweet.text + "</span>"
 
     spin()
 
@@ -51,7 +51,7 @@
     console.log("Found", tweets.length, "tweets")
 
     heart.innerHTML = tweets.map(function (t) {
-      return " <span>" + t.text + "</span>"
+      return " <span>" + t.user.name + ": " + t.text + "</span>"
     }).join(" ")
 
     reflow()
