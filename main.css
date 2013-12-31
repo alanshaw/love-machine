@@ -22,12 +22,21 @@ h1 {
   text-align: center;
   /*transition: font-size 0.5s linear;*/
   text-shadow: 0 0 1em #e8226f;
+  -webkit-transform: perspective(600px) rotateY(0deg);
+  -webkit-transition: -webkit-transform 1s;
+}
+#heart.spin {
+  -webkit-transform: perspective(600px) rotateY(360deg);
+}
+#heart span {
+  opacity: 1;
+  transition: opacity 0.5s linear;
+}
+#heart span.new {
+  opacity: 0;
 }
 #heart span:nth-child(even) {
   color: #cb1e61;
-}
-#heart span:first-letter {
-  color: #891542;
 }
 #content {
   hyphens: auto;
@@ -37,4 +46,5 @@ h1 {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 1;
 }
